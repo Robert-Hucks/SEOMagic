@@ -1,0 +1,22 @@
+{
+    "name": "roberthucks/seo-magic",
+    "description": "How do you get SEO working when you get tricked in to making an SPA? Magic.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Robert Hucks",
+            "email": "rahucks@gmail.com"
+        }
+    ],
+    "require": {
+        "predis/predis": "^1.1",
+        "monolog/monolog": "^1.24",
+        "nesbot/carbon": "^2.22",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "roberthucks\\SEOMagic\\": "src/"
+        }
+    }
+}
