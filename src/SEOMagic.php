@@ -29,18 +29,28 @@ class SEOMagic
 
     public function fetchPage(string $uri, bool $fresh = false): PageResponse
     {
+        // If the URI is invalid, throw error
         if (! $this->validateUri($uri)) {
             $this->logger->error($uri . ' is not a valid URI');
             throw new InvalidUriException($uri . ' is not a valid URI');
         }
 
+        // If page has already been cached and a fresh version isn't specifically requested, return that.
         if ($cached_page = $this->getCache()->get($uri) && $fresh = false) {
             $this->logger->debug($uri . ' is being fetched from the cache');
             return $cached_page;
         }
 
+        // Fetch live page, cache and return that.
         $this->logger->debug($uri . ' is being fetched live');
-        return new PageResponse("<h1>Hello</h1>");
+
+        $browser = $this->getPuppeteer()->launch();
+        $page = $browser->newPage();
+        $page->goto($uri, [
+            'waitUntil' => 'networkidle0'
+        ]);
+        
+        return new PageResponse($page->content());
     }
 
     public function validateUri(string $uri)
