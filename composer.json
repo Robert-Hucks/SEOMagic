@@ -1,7 +1,7 @@
 {
     "name": "roberthucks/seo-magic",
     "description": "How do you get SEO working when you get tricked in to making an SPA? Magic.",
-    "type": "project",
+    "type": "library",
     "authors": [
         {
             "name": "Robert Hucks",
