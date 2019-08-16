@@ -15,7 +15,7 @@ class RotatingFileLogger implements LogInterface
     {
         $configuration = Configuration::getInstance();
 
-        $formatter = new LineFormatter("[%datetime%] %channel%.%level_name%: %message%\n");
+        $formatter = new LineFormatter("[%datetime%] %channel%.%level_name%: %message% %context%\n");
         $stream = new RotatingFileHandler(
             rtrim($configuration->logfile_location, '/') . '/seomagic.log',
             $configuration->log_max_files,

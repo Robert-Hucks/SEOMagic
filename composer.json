@@ -13,7 +13,8 @@
         "monolog/monolog": "^1.24",
         "nesbot/carbon": "^2.22",
         "guzzlehttp/guzzle": "^6.3",
-        "nesk/puphpeteer": "^1.6"
+        "nesk/puphpeteer": "^1.6",
+        "paquettg/php-html-parser": "^2.0"
     },
     "autoload": {
         "psr-4": {
