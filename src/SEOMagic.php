@@ -114,6 +114,9 @@ class SEOMagic
         // Fetch and cache page
         $page = $this->getPageContent($uri);
         $this->getCache()->set($uri, $page);
+        $this->logger->debug($uri . ' is being cached', [
+            'execution_time' => microtime(true) - $start_request
+        ]);
     }
 
     /**

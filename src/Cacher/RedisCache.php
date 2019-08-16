@@ -33,12 +33,10 @@ class RedisCache implements CacheInterface
         return $this->hashString($uri);
     }
 
-    public function set(string $uri, PageResponse $data, int $ttl = null)
+    public function set(string $uri, PageResponse $data)
     {
         $this->redis->set($this->buildCacheKey($uri), serialize($data));
-        if (! is_null($ttl)) {
-            $this->redis->expire($this->buildCacheKey($uri), $ttl);
-        }
+        $this->redis->expire($this->buildCacheKey($uri), Configuration::getInstance()->redis_cache_default_ttl);
     }
 
     public function get(string $uri)
