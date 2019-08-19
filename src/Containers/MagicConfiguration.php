@@ -6,12 +6,10 @@ use Monolog\Logger;
 use roberthucks\SEOMagic\Cacher\RedisCache;
 use roberthucks\SEOMagic\Logger\RotatingFileLogger;
 use roberthucks\SEOMagic\Traits\ConstructsContainers;
-use roberthucks\SEOMagic\Traits\ValidatesContainers;
 
 class MagicConfiguration extends AbstractArrayAccess
 {
     use ConstructsContainers;
-    use ValidatesContainers;
 
     protected $data = [
         // Logger
@@ -22,6 +20,8 @@ class MagicConfiguration extends AbstractArrayAccess
         // Cache
         'cache' => RedisCache::class,
         'redis_cache_location' => 'tcp://127.0.0.1',
+        'redis_auth' => null,
+        'redis_database' => 0,
         'redis_cache_prefix' => 'seomagic:',
         'redis_cache_default_ttl' => 86400,
         // Puppeteer

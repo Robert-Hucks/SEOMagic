@@ -18,7 +18,10 @@ class RedisCache implements CacheInterface
         if (is_null($redis)) {
             $configuration = Configuration::getInstance();
 
-            $this->redis = new Client($configuration->redis_cache_location, [
+            $this->redis = new Client($configuration->redis_cache_location . '?' . http_build_query([
+                'database' => $configuration->redis_database,
+                'password' => $configuration->redis_auth,
+            ]), [
                 'prefix' => $configuration->redis_cache_prefix
             ]);
 
