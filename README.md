@@ -60,32 +60,44 @@ $magic->cachePage('https://example.com');
 ## Response Object
 This is the object that will be returned from the `fetchPage()` function and is used internally to store the page response.
 
-```php
-public $raw_html;
-public $render_time;
-protected $from_cache;
-```
-
-### $raw_html
-This is a string that contains the raw HTML content of the page (without scripts or style tags). This is the bread and butter of the response.
+### getHtml(): string
+This will return a string that contains the HTML content of the page (without scripts or style tags). This is the bread and butter of the response.
 
 ```php
 $magic = new SEOMagic();
 $magic->fetchPage('https://example.com');
-$magic->raw_html; //<h1>Hello</h1>
+$magic->getHtml(); //<h1>Hello</h1>
 ```
 
-### $render_time
-This is a float that represents the time it took to render the page. This is mainly for performance metrics.
+### getHeaders(): array
+This will return an array of all of the headers.
 
 ```php
 $magic = new SEOMagic();
 $magic->fetchPage('https://example.com');
-$magic->render_time; //1.56423
+$magic->getHeaders(); //['content-type' => 'text/html']
 ```
 
-### $from_cache
-This is a boolean that states whether or not the page is being fetched from the cache or not. This can be used to check whether your caching system is working correctly and how many hits/misses you are getting.
+### getResponseCode(): int
+This will return the response code of the request.
+
+```php
+$magic = new SEOMagic();
+$magic->fetchPage('https://example.com');
+$magic->getResponseCode(); //200
+```
+
+### getRenderTime(): float
+This returns a float that represents the time it took to render the page. This is mainly for performance metrics.
+
+```php
+$magic = new SEOMagic();
+$magic->fetchPage('https://example.com');
+$magic->getRenderTime(); //1.56423
+```
+
+### isFromCache(): bool
+This returns a boolean that states whether or not the page is being fetched from the cache or not. This can be used to check whether your caching system is working correctly and how many hits/misses you are getting.
 
 ```php
 $magic = new SEOMagic();

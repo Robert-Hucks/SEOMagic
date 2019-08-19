@@ -11,7 +11,7 @@ $configuration->cache = roberthucks\SEOMagic\Cacher\NullCache::class;
 
 $magic = new SEOMagic();
 
-$page = $magic->fetchPage('....');
+$page = $magic->fetchPage('https://example.com');
 
 print_r([
     'html' => $page->getHtml(),
