@@ -20,6 +20,25 @@ use roberthucks\SEOMagic\SEOMagic;
 $magic = new SEOMagic();
 ```
 
+### Configuration
+
+Need to change some of the default settings?
+
+```php
+<?php
+
+include 'vendor/autoload.php';
+
+use roberthucks\SEOMagic\SEOMagic;
+use roberthucks\SEOMagic\Configuration;
+
+//Change the cache mechanism to disable the cache
+$configuration = Configuration::getInstance();
+$configuration->cache = roberthucks\SEOMagic\Cacher\NullCache::class;
+
+$magic = new SEOMagic();
+```
+
 ### fetchPage(string $uri, bool $fresh = false)
 `fetchPage()` will return a `PageResponse` object containing the HTML content of the requested URI.
 Pages are cached for 24 hours by default, but this is customisable through the variable `redis_cache_default_ttl`.
