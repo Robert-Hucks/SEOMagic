@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace roberthucks\SEOMagic;
 
 use Nesk\Puphpeteer\Puppeteer;
-use PHPHtmlParser\Dom;
+use Nesk\Rialto\Exceptions\Node;
 use roberthucks\SEOMagic\Cacher\CacheInterface;
 use roberthucks\SEOMagic\Containers\PageResponse;
 use roberthucks\SEOMagic\Exceptions\InvalidContainerDataException;
 use roberthucks\SEOMagic\Exceptions\InvalidUriException;
+use roberthucks\SEOMagic\Exceptions\NodeErrorException;
 use roberthucks\SEOMagic\Logger\LogInterface;
 
 /**
@@ -27,11 +28,6 @@ class SEOMagic
      * @var \Nesk\Puphpeteer\Puppeteer
      */
     protected $puppeteer;
-
-    /**
-     * @var \PHPHtmlParser\Dom
-     */
-    protected $dom_parser;
 
     /**
      * @var \roberthucks\SEOMagic\Cacher\CacheInterface
@@ -130,17 +126,19 @@ class SEOMagic
         // Load page in Puppeteer and get HTML
         $browser = $this->getPuppeteer()->launch();
         $page = $browser->newPage();
-        $page->goto($uri, [
-            'waitUntil' => 'networkidle2'
-        ]);
+        try {
+            $response = $page->tryCatch->goto($uri, [
+                'waitUntil' => 'networkidle2'
+            ]);
 
-        $response = new PageResponse($this->getDomParser()->loadStr($page->content(), [
-            'removeScripts' => true,
-            'removeStyles' => true
-        ])->outerHtml);
-        $response->setRenderTime(microtime(true) - $start_fetch);
+            $response = new PageResponse($response);
+            $response->setRenderTime(microtime(true) - $start_fetch);
 
-        return $response;
+            return $response;
+        } catch (Node\Exception $e) {
+            $this->logger->error('An error has occurred with the Puppeteer/Node process.', ['exception' => $e]);
+            throw new NodeErrorException('An error has occurred with the Puppeteer/Node process.');
+        }
     }
 
     /**
@@ -193,20 +191,11 @@ class SEOMagic
     public function getPuppeteer(): Puppeteer
     {
         if (! $this->puppeteer) {
-            $this->puppeteer = new Puppeteer;
+            $this->puppeteer = new Puppeteer([
+                'executable_path' => $this->getConfiguration()->node_execution_path
+            ]);
         }
 
         return $this->puppeteer;
-    }
-
-    /**
-     * @return \PHPHtmlParser\Dom
-     */
-    public function getDomParser(): Dom
-    {
-        if (! $this->dom_parser) {
-            $this->dom_parser = new Dom;
-        }
-        return $this->dom_parser;
     }
 }

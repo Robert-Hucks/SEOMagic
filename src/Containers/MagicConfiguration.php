@@ -23,6 +23,8 @@ class MagicConfiguration extends AbstractArrayAccess
         'cache' => RedisCache::class,
         'redis_cache_location' => 'tcp://127.0.0.1',
         'redis_cache_prefix' => 'seomagic:',
-        'redis_cache_default_ttl' => 86400
+        'redis_cache_default_ttl' => 86400,
+        // Puppeteer
+        'node_execution_path' => 'node'
     ];
 }
