@@ -135,14 +135,19 @@ class SEOMagic
         $browser = $this->getPuppeteer()->launch();
         $page = $browser->newPage();
         try {
-            $response = $page->tryCatch->goto($uri, [
-                'waitUntil' => 'networkidle2'
+            $page_response = $page->goto($uri, [
+                'waitUntil' => [
+                    'networkidle0',
+                    'networkidle2',
+                    'domcontentloaded',
+                    'load'
+                ]
             ]);
 
-            $response = new PageResponse($this->getDomParser()->loadStr($response->text(), [
+            $response = new PageResponse($this->getDomParser()->loadStr((string) $page->content(), [
                 'removeScripts' => true,
                 'removeStyles' => true
-            ])->outerHtml, $response->headers(), $response->status());
+            ]), $page_response->headers(), $page_response->status());
             $response->setRenderTime(microtime(true) - $start_fetch);
 
             return $response;
