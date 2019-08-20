@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace roberthucks\SEOMagic;
 
 use Nesk\Puphpeteer\Puppeteer;
+use PHPHtmlParser\Dom;
 use Nesk\Rialto\Exceptions\Node;
 use roberthucks\SEOMagic\Cacher\CacheInterface;
 use roberthucks\SEOMagic\Containers\PageResponse;
@@ -28,6 +29,11 @@ class SEOMagic
      * @var \Nesk\Puphpeteer\Puppeteer
      */
     protected $puppeteer;
+
+    /**
+     * @var \PHPHtmlParser\Dom
+     */
+    protected $dom_parser;
 
     /**
      * @var \roberthucks\SEOMagic\Cacher\CacheInterface
@@ -119,6 +125,8 @@ class SEOMagic
      * @param string $uri
      * 
      * @return \roberthucks\SEOMagic\Containers\PageResponse
+     * 
+     * @throws \roberthucks\SEOMagic\Exceptions\NodeErrorException
      */
     public function getPageContent(string $uri): PageResponse
     {
@@ -131,7 +139,10 @@ class SEOMagic
                 'waitUntil' => 'networkidle2'
             ]);
 
-            $response = new PageResponse($response);
+            $response = new PageResponse($this->getDomParser()->loadStr($response->text(), [
+                'removeScripts' => true,
+                'removeStyles' => true
+            ])->outerHtml, $response->headers(), $response->status());
             $response->setRenderTime(microtime(true) - $start_fetch);
 
             return $response;
@@ -197,5 +208,17 @@ class SEOMagic
         }
 
         return $this->puppeteer;
+    }
+
+    /**
+     * @return \PHPHtmlParser\Dom
+     */
+    public function getDomParser(): Dom
+    {
+        if (! $this->dom_parser) {
+            $this->dom_parser = new Dom;
+        }
+
+        return $this->dom_parser;
     }
 }

@@ -7,7 +7,7 @@ use roberthucks\SEOMagic\Configuration;
 
 // Disable caching
 $configuration = Configuration::getInstance();
-$configuration->cache = roberthucks\SEOMagic\Cacher\NullCache::class;
+//$configuration->cache = roberthucks\SEOMagic\Cacher\NullCache::class;
 
 $magic = new SEOMagic();
 
