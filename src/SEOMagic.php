@@ -144,7 +144,7 @@ class SEOMagic
                 ]
             ]);
 
-            $response = new PageResponse($this->getDomParser()->loadStr((string) $page->content(), [
+            $response = new PageResponse((string) $this->getDomParser()->loadStr( $page->content(), [
                 'removeScripts' => true,
                 'removeStyles' => true
             ]), $page_response->headers(), $page_response->status());
